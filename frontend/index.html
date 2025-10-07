@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Umar Web | AI Photo Enhancer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">Umar<span>Web</span></div>
+    <nav class="nav">
+      <a href="#" class="help">Help</a>
+      <a href="login.html" class="login-btn">Log In / Sign Up</a>
+      <div class="lang">
+        English ▾
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="image-container" id="imageCompare">
+  <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1200" class="before" alt="Before" />
+  <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1200&h=900&fit=crop" class="after" alt="After" />
+
+  <div class="slider" id="slider">
+    <div class="circle"></div>
+    <span class="label before-label">Before</span>
+    <span class="label after-label">After</span>
+  </div>
+</div>
+
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="tag">
+        <span class="dot">●</span> NEW • TRY VIDEO ENHANCE
+      </div>
+      <h1>AI photo and video enhancer, in one click</h1>
+      <p>
+        Umar Web’s photo and video enhancer helps you improve, sharpen and unblur your media files instantly.
+      </p>
+
+     <div class="upload-box">
+  <input type="file" id="fileInput" accept="image/*" hidden />
+
+  <!-- clickable area -->
+  <label for="fileInput" class="upload-label">
+    <span class="choose-btn">Choose files ⬆</span>
+    <p>or drop it here</p>
+  </label>
+
+  <div class="media-btns">
+    <button class="media photos" id="photoBtn">📷 Photos</button>
+    <button class="media videos" id="videoBtn">🎞 Videos</button>
+  </div>
+
+  <p class="terms">
+    By continuing, you accept our <a href="#">Terms of Service</a> and acknowledge receipt of our
+    <a href="#">Privacy & Cookie Policy</a>.
+  </p>
+</div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 Umar AI Labs — All Rights Reserved</p>
+  </footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const slider = document.getElementById("slider");
+  const afterImg = document.querySelector(".after");
+  const container = document.getElementById("imageCompare");
+
+  if (!slider || !afterImg || !container) {
+    console.warn("Slider elements not found.");
+    return;
+  }
+
+  let isDown = false;
+
+  function moveSlider(e) {
+    if (!isDown) return;
+    const rect = container.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    let pos = ((clientX - rect.left) / rect.width) * 100;
+    pos = Math.min(Math.max(pos, 0), 100);
+    afterImg.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
+    slider.style.left = `${pos}%`;
+  }
+
+  slider.addEventListener("mousedown", () => (isDown = true));
+  slider.addEventListener("touchstart", () => (isDown = true));
+  window.addEventListener("mouseup", () => (isDown = false));
+  window.addEventListener("touchend", () => (isDown = false));
+  window.addEventListener("mousemove", moveSlider);
+  window.addEventListener("touchmove", moveSlider);
+});
+// inside script at bottom of index.html
+document.addEventListener("DOMContentLoaded", () => {
+  const fileInput = document.getElementById("fileInput");
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      // Store image data in sessionStorage
+      sessionStorage.setItem("uploadedImage", reader.result);
+      // Redirect to enhance page
+      window.location.href = "enhance.html";
+    };
+    reader.readAsDataURL(file);
+  });
+});
+document.getElementById("photoBtn").addEventListener("click", () => {
+  document.getElementById("fileInput").accept = "image/*";
+  document.getElementById("fileInput").click();
+});
+</script>
+
+</body>
+</html>
